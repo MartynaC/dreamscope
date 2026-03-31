@@ -1,8 +1,12 @@
 import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer
+import nltk
+from nltk.stem import WordNetLemmatizer
+nltk.download('wordnet')
 
 model = SentenceTransformer("all-mpnet-base-v2")
+lemmatizer = WordNetLemmatizer()
 
  #Run this code once when dataset is updated or when model has changed
  #to create the embeddings for the dream symbols and interpretations, 
@@ -21,7 +25,12 @@ model = SentenceTransformer("all-mpnet-base-v2")
 #np.save("raw_data/symbol_embeddings.npy", embeddings)
 #print("saved")
 
+def lemmatize(text):
+    return " ".join([lemmatizer.lemmatize(word) for word in text.lower().split()])
+
+
 def match_dream(dream_text, top_k=5): # 5 best matches
+    dream_text = lemmatize(dream_text)
     df = pd.read_csv("raw_data/dreams_interpretations.csv")
     embeddings = np.load("raw_data/symbol_embeddings.npy")
     
@@ -41,7 +50,7 @@ def match_dream(dream_text, top_k=5): # 5 best matches
 
 
 if __name__ == "__main__":
-    dream =  "i dreamed about a ladybug"
+    dream =  "i dreamed about a birds and horses"
     results = match_dream(dream)
     
     for r in results:
