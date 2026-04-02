@@ -1,1 +1,14 @@
+.env
+.env.sample
+.envrc
+.python-version
+Makefile
 
+# System files
+.vscode/
+*.egg-info
+
+# Data files
+
+# Other
+.personal/
