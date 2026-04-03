@@ -5,7 +5,8 @@
 Makefile
 
 # System files
-.vscode/
+*.pyc
+*.vscode
 *.egg-info
 
 # Data files
