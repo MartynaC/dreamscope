@@ -2,3 +2,6 @@ sentence-transformers
 pandas
 numpy
 nltk
+streamlit
+transformers
+torch
