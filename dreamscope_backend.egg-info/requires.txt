@@ -4,3 +4,6 @@ numpy
 nltk
 fastapi
 uvicorn
+streamlit
+transformers
+torch

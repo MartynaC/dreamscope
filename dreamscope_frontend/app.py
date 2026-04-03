@@ -1,6 +1,6 @@
 import streamlit as st
-from dataset_matching.dream_matcher import match_dream
-from emotion_classification.emotions import initialize_model, classify
+from Notebooks.dataset_matching.dream_matcher import match_dream
+from Notebooks.emotion_classification.emotions import initialize_model, classify
 
 st.set_page_config(page_title="DreamScope", page_icon="🌙")
 st.title("🌙 DreamScope")
@@ -19,7 +19,7 @@ if st.button("Interpret my dream"):
         with st.spinner("Analysing your dream..."):
             emotions = classify(classifier, dream_input)[0] # emotion_classification
             results = match_dream(dream_input) # dream_matcher
-        
+
         st.subheader("Emotions detected")
         for emotion in emotions:
             st.write(f"**{emotion['label']}** — {round(emotion['score'] * 100)}%")
@@ -31,4 +31,3 @@ if st.button("Interpret my dream"):
             st.divider()
     else:
         st.warning("Please describe your dream first.")
-

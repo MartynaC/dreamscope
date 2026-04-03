@@ -10,6 +10,9 @@ build_for_production:
 		-t $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT)/$(ARTIFACT_REPO)/$(IMAGE):prod \
 		.
 
+run_container_prod:
+	docker run -it -e PORT=8000 -p 8080:8000 $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT)/$(ARTIFACT_REPO)/$(IMAGE):prod \
+
 push_image_production:
 	docker push $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT)/$(ARTIFACT_REPO)/$(IMAGE):prod
 

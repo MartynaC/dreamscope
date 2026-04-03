@@ -14,7 +14,7 @@ lemmatizer = WordNetLemmatizer()
 
 def match_dream(dream_text, top_k=5): # 5 best matches
     dream_text = lemmatize(dream_text)
-    df = pd.read_csv("dreamscope_backend/data/dreams_interpretations.csv")
+    df = pd.read_csv("dreamscope_backend/data/dream_symbols.csv")
     embeddings = np.load("dreamscope_backend/data/symbol_embeddings.npy")
 
     query_embedding = model.encode([dream_text])

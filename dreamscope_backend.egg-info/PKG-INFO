@@ -7,4 +7,7 @@ Requires-Dist: numpy
 Requires-Dist: nltk
 Requires-Dist: fastapi
 Requires-Dist: uvicorn
+Requires-Dist: streamlit
+Requires-Dist: transformers
+Requires-Dist: torch
 Dynamic: requires-dist

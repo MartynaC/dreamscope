@@ -13,7 +13,7 @@ def save_embeddings():
 
     model = SentenceTransformer("all-mpnet-base-v2")
 
-    df = pd.read_csv("data/dreams_interpretations.csv")
+    df = pd.read_csv("data/dream_symbols.csv")
 
     texts = (df["Dream Symbol"] + " " + df["Interpretation"]).tolist()
 
