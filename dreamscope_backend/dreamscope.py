@@ -23,10 +23,10 @@ def match_dream(dream_text, top_k=5): # 5 best matches
 
     results = []
     for idx in top_indices:
-        if similarities[idx] > 0.1:  # Only include results with a similarity score above a certain threshold
+        if similarities[idx] > 0.3:  # Only include results with a similarity score above a certain threshold
             results.append({
-                "Dream Symbol": df.iloc[idx]["Dream Symbol"],
-                "Interpretation": df.iloc[idx]["Interpretation"],
+                "Dream Symbol": df.iloc[idx]["symbol"],
+                "Interpretation": df.iloc[idx]["meaning"],
                 "score": round(float(similarities[idx]), 4)
                 })
     return results
