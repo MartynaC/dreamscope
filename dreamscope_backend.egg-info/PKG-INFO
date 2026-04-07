@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: dreamscope_backend
+Version: 0.0.1
+Requires-Dist: sentence-transformers
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: nltk
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: streamlit
+Requires-Dist: transformers
+Requires-Dist: torch
+Dynamic: requires-dist
