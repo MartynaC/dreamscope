@@ -4,7 +4,7 @@
 .envrc
 
 # System files
-.ipynb_checkpoints
+.ipynb_checkpoints/
 *.pyc
 *.swp
 *.iml
