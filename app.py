@@ -27,7 +27,6 @@ if st.button("Interpret my dream"):
         st.subheader("Symbol interpretations")
         for r in results:
             st.write(f"**{r['Dream Symbol']}** (score: {r['score']})")
-            st.caption(r['Context']) 
             st.write(r['Interpretation'])
             st.divider()
     else:
