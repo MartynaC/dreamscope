@@ -2,6 +2,8 @@ sentence-transformers
 pandas
 numpy
 nltk
+fastapi
+uvicorn
 streamlit
 transformers
 torch
