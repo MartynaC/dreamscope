@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 from sentence_transformers import SentenceTransformer
+from transformers import pipeline
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -31,11 +32,41 @@ def match_dream(dream_text, top_k=5): # 5 best matches
                 })
     return results
 
+def match_emotions(dream_text):
+
+    # Initializing model
+    def initialize_model():
+        emotion_classifier = pipeline(
+            'text-classification',
+            model='SamLowe/roberta-base-go_emotions',
+            top_k=4
+        )
+        return emotion_classifier
+
+    # Classifying emotions
+    def classify(emotion_classifier, dream_text):
+        response = classifier(dream_text)
+        return response
+
+    classifier = initialize_model()
+    emotions = classify(classifier, dream_text)
+
+    return emotions[0]
+
 
 if __name__ == "__main__":
-    dream =  "i dreamed about a birds and horses"
+
+    dream =  "i dreamed about birds and horses"
     results = match_dream(dream)
 
-    for r in results:
-        print(f"\n{r['Dream Symbol']} (score: {r['score']})")
-        print(r['Interpretation'])
+    # for r in results:
+    #     print(f"\n{r['Dream Symbol']} (score: {r['score']})")
+    #     print(r['Interpretation'])
+
+    emotions = match_emotions(dream)[0]
+
+    # for emotion in emotions:
+    #     print(f"**{emotion['label']}** — {round(emotion['score'] * 100)}%")
+
+    print(results)
+    print(emotions)
