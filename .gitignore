@@ -1,1 +1,17 @@
-.DS_Store
+.env
+.env.yaml
+.env.sample
+.envrc
+
+# System files
+.ipynb_checkpoints
+*.pyc
+*.swp
+*.iml
+*.vscode
+*.egg-info
+
+# Data files
+
+# Other
+.personal
