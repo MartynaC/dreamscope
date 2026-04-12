@@ -13,15 +13,14 @@ def save_embeddings():
 
     model = SentenceTransformer("all-mpnet-base-v2")
 
-    df = pd.read_csv("dreamscope_backend/data/dream_symbols.csv")
-    texts = (df["symbol"] + " " + df["meaning"]).tolist()
-
-    # data from Thomas's Notebooks folder:
-    #df = pd.read_csv("dreamscope_backend/data/dream_symbols_clean.csv")
-    #texts = (df["original_label"] + " " + df["interpretation_text_clean"]).tolist()
+    df = pd.read_csv("dreamscope_backend/data/dream_symbols_clean_v5.csv")
+    texts = (df["symbol_clean"] + " " + df["context_clean"]).tolist()
 
     embeddings = model.encode(texts, show_progress_bar=True)
     print(embeddings.shape)
 
     np.save("dreamscope_backend/data/symbol_embeddings.npy", embeddings)
     print("saved")
+
+if __name__ == "__main__":
+    save_embeddings()
