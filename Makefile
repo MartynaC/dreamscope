@@ -1,3 +1,5 @@
+include .env 
+
 build_container_local:
 	docker build --tag=$(IMAGE):dev .
 

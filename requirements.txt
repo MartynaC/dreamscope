@@ -7,3 +7,5 @@ uvicorn
 streamlit
 transformers
 torch
+google-cloud-storage
+google-auth

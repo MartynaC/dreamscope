@@ -74,7 +74,7 @@ def match_images_by_emotion(top_emotion, n=3):
     df_colors["distance"] = df_colors.apply(
         lambda row: color_distance((row["r"], row["g"], row["b"]), target), axis=1
     )
-    # take top 20 closest, pick 3 randomly
+
     closest = df_colors.nsmallest(n, "distance")
     return closest["filename"].tolist()
 
