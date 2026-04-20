@@ -4,7 +4,8 @@ from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
 import os
 import tempfile
-from google.cloud import storage
+# from google.cloud import storage
+import urllib.request
 
 model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
@@ -44,13 +45,19 @@ def build_clip_index():
     print(f"saved {len(filenames)} image embeddings")
 
 
+# def load_from_gcs(blob_name):
+#     client = storage.Client()
+#     bucket = client.bucket(BUCKET_NAME)
+#     blob = bucket.blob(blob_name)
+#     with tempfile.NamedTemporaryFile(delete=False, suffix=".npy") as tmp:
+#         blob.download_to_filename(tmp.name)
+#         return np.load(tmp.name, allow_pickle=True)
+
 def load_from_gcs(blob_name):
-    client = storage.Client()
-    bucket = client.bucket(BUCKET_NAME)
-    blob = bucket.blob(blob_name)
+    url = f"https://storage.googleapis.com/{BUCKET_NAME}/{blob_name}"
     with tempfile.NamedTemporaryFile(delete=False, suffix=".npy") as tmp:
-        blob.download_to_filename(tmp.name)
-        return np.load(tmp.name, allow_pickle=True)
+        urllib.request.urlretrieve(url, tmp.name)
+    return np.load(tmp.name, allow_pickle=True)
 
 
 GCS_BASE_URL = "https://storage.googleapis.com/dreamscope-images/abstract_art_512"
@@ -73,7 +80,7 @@ def match_images_clip(dream_text, n=3, use_gcs=False):
 
     similarities = np.dot(embeddings, text_embedding)
     top_indices = np.argsort(similarities)[-n:][::-1]
-    
+
     # return URLs instead of filenames
     return [f"{GCS_BASE_URL}/{filenames[i]}" for i in top_indices]
 
