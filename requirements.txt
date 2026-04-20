@@ -10,3 +10,4 @@ transformers
 uvicorn
 google-cloud-storage
 google-auth
+matplotlib
