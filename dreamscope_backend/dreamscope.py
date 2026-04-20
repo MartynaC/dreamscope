@@ -111,7 +111,7 @@ def match_dream(dream_text, top_k=5):
     pipe = pipeline(
         "text-generation",
         model='microsoft/Phi-3-mini-4k-instruct',
-        device='mps'
+        device='cpu'
         )
     print ("✅ initialized LLM...")
 
