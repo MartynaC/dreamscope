@@ -1,9 +1,10 @@
-sentence-transformers
-pandas
-numpy
-nltk
+chromadb
 fastapi
-uvicorn
+nltk
+numpy
+pandas
+sentence-transformers
 streamlit
-transformers
 torch
+transformers
+uvicorn
