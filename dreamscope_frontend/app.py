@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
-from dreamscope_backend.dreamscope import match_dream, match_emotions
-from dreamscope_backend.clip_matcher import match_images_clip
+
 from emotion_waves import plot_emotion_waves
 
 API_URL = "https://dreamscope-api-356964226060.europe-west1.run.app/"
@@ -127,6 +126,8 @@ elif tab == "🔮 RAG":
         if dream_input:
             with st.spinner("Analysing your dream... (this may take a minute)"):
                 # LOCAL - comment out when using API
+                from dreamscope_backend.dreamscope import match_dream, match_emotions
+                from dreamscope_backend.clip_matcher import match_images_clip
                 emotions = match_emotions(dream_input)
                 results = match_dream(dream_input)
                 image_urls = match_images_clip(dream_input, n=3)
