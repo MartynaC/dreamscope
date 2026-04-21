@@ -7,6 +7,8 @@ API_URL = "https://dreamscope-api-356964226060.europe-west1.run.app/"
 
 st.set_page_config(page_title="DreamScope", page_icon="🌙")
 
+is_dark_mode = st.context.theme.type == "dark"
+
 tab = st.sidebar.radio("Navigation", ["🌙 MVP", "✨ Extended", "🧪 Visualization Lab"], label_visibility="collapsed")
 
 st.title("🌙 DreamScope")
@@ -94,13 +96,9 @@ elif tab == "🧪 Visualization Lab":
                 image_urls = img_response['images']
 
             st.subheader("Emotions detected")
-            # --- V1 ---
-            # for emotion in emotions:
-            #     st.write(f"**{emotion['label']}** — {round(emotion['score'] * 100)}%")# with color {emotion['RGB']}")
 
-            # --- V2 ---
             with st.container():
-                # Ajoute du CSS pour définir une hauteur minimale
+                # Using CSS to define a minimal container height
                 st.markdown(
                     """
                     <style>
@@ -114,7 +112,7 @@ elif tab == "🧪 Visualization Lab":
                     """,
                     unsafe_allow_html=True,
                 )
-            fig = plot_emotion_waves(emotions)
+            fig = plot_emotion_waves(emotions, is_dark_mode=is_dark_mode)
             st.pyplot(fig, width='stretch')
 
             st.subheader("Dream images — CLIP matched to dream description")

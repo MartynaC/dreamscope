@@ -101,7 +101,7 @@ def _fill_wave_gradient(
 def plot_emotion_waves(
     emotions: list,
     figsize: tuple = (10, 4),
-    dark_bg: bool = True,
+    is_dark_mode: bool = True,
     x_steps: int = 1000,
 ) -> plt.Figure:
     """
@@ -130,13 +130,12 @@ def plot_emotion_waves(
         e.setdefault("freq",  default_freqs[i  % len(default_freqs)])
         e.setdefault("phase", default_phases[i % len(default_phases)])
 
-    bg_color  = "#0D0D1A" if dark_bg else "#F7F6F2"
-    mid_color = "#FFFFFF" if dark_bg else "#000000"
-    txt_color = "#EEEEF5" if dark_bg else "#333333"
+    mid_color = "#FFFFFF" if is_dark_mode else "#000000"
+    txt_color = "#EEEEF5" if is_dark_mode else "#333333"
 
     fig, ax = plt.subplots(figsize=figsize)
-    fig.patch.set_facecolor(bg_color)
-    ax.set_facecolor(bg_color)
+    fig.patch.set_alpha(0)
+    ax.set_facecolor('none')
 
     x = np.linspace(0, 1, x_steps)
     mid_y   = 0.0
@@ -163,9 +162,9 @@ def plot_emotion_waves(
     ax.axhline(
         mid_y,
         color=mid_color,
-        linewidth=0.4,
+        linewidth=0.6,
         linestyle="--",
-        alpha=0.2,
+        alpha=0.4,
     )
 
     # Horizontal legend at the top, centered on the figure
@@ -188,12 +187,12 @@ def plot_emotion_waves(
         ncol=len(emotions),
         framealpha=0.0,
         labelcolor=txt_color,
-        fontsize=10,
+        fontsize=18,
         handlelength=2.2,
         handleheight=1.0,
         borderpad=0.6,
-        columnspacing=2.0,
-        handletextpad=0.8,
+        columnspacing=2.5,
+        handletextpad=1.2,
         prop={'weight': 'bold'}
     )
 
