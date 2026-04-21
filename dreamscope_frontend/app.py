@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 
 from emotion_waves import plot_emotion_waves
-from dreamscope_backend.dreamscope import match_dream, match_emotions, match_dream_symbols
-from dreamscope_backend.clip_matcher import match_images_clip
+#from dreamscope_backend.dreamscope import match_dream, match_emotions, match_dream_symbols
+#from dreamscope_backend.clip_matcher import match_images_clip
 
 API_URL = "https://dreamscope-api-356964226060.europe-west1.run.app/"
 
