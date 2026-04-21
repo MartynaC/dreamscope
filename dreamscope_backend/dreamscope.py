@@ -16,6 +16,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 print(BASE_DIR)
 
+chroma_client = chromadb.PersistentClient(path=f'{BASE_DIR}/data/chroma_db')
+
 #from dreamscope_backend.preprocess import *
 
 # lemmatizer = WordNetLemmatizer()
@@ -70,10 +72,9 @@ def match_dream(dream_text, top_k=5):
 
     # Query the vector dB
     # client = chromadb.PersistentClient(path="./data/chroma_db")
-    client = chromadb.PersistentClient(path=f'{BASE_DIR}/data/chroma_db')
 
 
-    collection_context_metadata = client.get_collection("dream_symbols_metadata")
+    collection_context_metadata = chroma_client.get_collection("dream_symbols_metadata")
 
     result_metadata = collection_context_metadata.query(
         query_embeddings=searched_vectors,
