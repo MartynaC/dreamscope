@@ -8,3 +8,7 @@ streamlit
 torch
 transformers
 uvicorn
+google-cloud-storage
+google-auth
+matplotlib
+accelerate

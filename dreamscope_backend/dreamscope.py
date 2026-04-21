@@ -111,7 +111,7 @@ def match_dream(dream_text, top_k=5):
     pipe = pipeline(
         "text-generation",
         model='microsoft/Phi-3-mini-4k-instruct',
-        device='mps'
+        device='cpu'
         )
     print ("✅ initialized LLM...")
 
@@ -141,15 +141,25 @@ def match_emotions(dream_text):
         )
 
     classifier = initialize_model()
-    emotions = classifier(dream_text)[0]
-    emotions = [e for e in emotions if e['label'] != 'neutral']
+    output = classifier(dream_text)[0]
+    output_df = pd.DataFrame(output)
+    output_df = output_df[output_df['label'] != 'neutral'].reset_index(drop=True)
+    total = sum(output_df['score'])
+    output_df['score'] = output_df['score'] / total
+    output_df
 
-    # recalculate scores to sum to 100%
-    total = sum(e['score'] for e in emotions)
-    emotions = [{'label': e['label'], 'score': e['score'] / total} for e in emotions]
+    # retrieve file with emotion colors
+    df = pd.read_csv("dreamscope_backend/data/goemotions_unique_colors.csv")
 
-    # return top 4 after rescaling
-    emotions = sorted(emotions, key=lambda x: x['score'], reverse=True)[:4]
+    emotions_df = output_df.merge(
+        df, how='left', on='label'
+        )[['label','score','HEX','RGB']].head(4)
+
+    emotions = [
+        {"label": row['label'], "score": row['score'], "RGB": eval(row['RGB'])}
+        for _, row in emotions_df.iterrows()
+    ]
+
     return emotions
 
 
