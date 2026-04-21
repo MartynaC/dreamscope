@@ -10,9 +10,14 @@ def root():
 @app.get("/interpretations")
 def interpretations(dream_text):
     emotions = match_emotions(dream_text)
-    descriptions = match_dream(dream_text)
     symbols = match_dream_symbols(dream_text)
-    return {"emotions": emotions, "descriptions": symbols, "rag": descriptions}
+    return {"emotions": emotions, "descriptions": symbols}
+
+@app.get("/rag")
+def rag(dream_text):
+    emotions = match_emotions(dream_text)
+    rag_result = match_dream(dream_text)
+    return {"emotions": emotions, "rag": rag_result}
 
 @app.get("/images")
 def images(dream_text):

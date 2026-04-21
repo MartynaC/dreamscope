@@ -134,7 +134,7 @@ elif tab == "🔮 RAG":
                 #image_urls = match_images_clip(dream_input, n=4)
 #
                 # API - comment out when working locally
-                response = requests.get(url, params=params).json()
+                response = requests.get(f"{API_URL}/rag", params=params).json()
                 emotions = response['emotions']
                 results = response['rag']
                 img_response = requests.get(f"{API_URL}/images", params=params).json()
