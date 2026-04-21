@@ -21,5 +21,6 @@ push_image_production:
 deploy_to_cloud_run:
 	gcloud run deploy \
 		--image $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT)/$(ARTIFACT_REPO)/$(IMAGE):prod \
+		--cpu 4 \
 		--memory $(MEMORY) \
 		--region $(GCP_REGION)
