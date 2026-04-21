@@ -136,7 +136,7 @@ elif tab == "🔮 RAG":
                 # API - comment out when working locally
                 response = requests.get(url, params=params).json()
                 emotions = response['emotions']
-                results = response['descriptions']
+                results = response['rag']
                 img_response = requests.get(f"{API_URL}/images", params=params).json()
                 image_urls = img_response['images']
             st.subheader("Emotions detected")

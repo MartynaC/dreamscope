@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-from dreamscope_backend.dreamscope import match_dream, match_emotions
 from dreamscope_backend.clip_matcher import match_images_clip
-
+from dreamscope_backend.dreamscope import match_dream, match_dream_symbols, match_emotions
 app = FastAPI()
 
 @app.get("/")
@@ -12,7 +11,8 @@ def root():
 def interpretations(dream_text):
     emotions = match_emotions(dream_text)
     descriptions = match_dream(dream_text)
-    return {"emotions": emotions, "descriptions": descriptions}
+    symbols = match_dream_symbols(dream_text)
+    return {"emotions": emotions, "descriptions": symbols, "rag": descriptions}
 
 @app.get("/images")
 def images(dream_text):
