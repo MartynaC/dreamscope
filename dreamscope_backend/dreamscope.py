@@ -11,10 +11,21 @@ import nltk
 from nltk.tokenize import sent_tokenize
 nltk.download('wordnet')
 
+from google import genai
+
 from pathlib import Path
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent
 print(BASE_DIR)
+
+# Initialize Gemini Client
+gem_client = genai.Client(api_key=os.getenv("API_KEY"))
+
 
 #from dreamscope_backend.preprocess import *
 
@@ -107,13 +118,14 @@ def match_dream(dream_text, top_k=5):
     # Extract list of ranked interpretations
     interpretations = [symbol[0][0] + ' ' + symbol[0][1] for symbol in ranked]
 
-    # Initialize response Model
-    pipe = pipeline(
-        "text-generation",
-        model='microsoft/Phi-3-mini-4k-instruct',
-        device='cpu'
-        )
-    print ("✅ initialized LLM...")
+    # # Initialize response Model
+    # pipe = pipeline(
+    #     "text-generation",
+    #     model='microsoft/Phi-3-mini-4k-instruct',
+    #     device='cpu'
+    #     )
+    # print ("✅ initialized LLM...")
+
 
     # Define prompt template
     prompt = f'You are interpreting a dream submitted by the user. \
@@ -123,13 +135,20 @@ def match_dream(dream_text, top_k=5):
         strictly using these interpretations only and not adding any new idea, \
         in less than 100 words.'
 
-    messages = [
-            {'role': 'system', 'content': prompt},
-        ]
+    #messages = [
+    #        {'role': 'system', 'content': prompt},
+    #    ]
 
-    # Query model
-    output = pipe(messages)
-    return output[0]['generated_text'][-1]['content']
+    # # Query model
+    # output = pipe(messages)
+    # return output[0]['generated_text'][-1]['content']
+
+    # Query Google API
+    response = gem_client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=prompt
+        )
+    return response.text
 
 
 def match_emotions(dream_text):
