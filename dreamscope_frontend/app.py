@@ -21,6 +21,7 @@ dream_input = st.text_area("Describe your dream", placeholder="Describe your dre
 url = f"{API_URL}/interpretations"
 params = {'dream_text': dream_input}
 
+
 if tab == "🌙 MVP":
     if st.button("Interpret my dream"):
         if dream_input:
@@ -62,6 +63,7 @@ elif tab == "✨ Extended":
                 results = response['descriptions']
                 img_response = requests.get(f"{API_URL}/images", params=params).json()
                 image_urls = img_response['images']
+
             st.subheader("Emotions detected")
             for emotion in emotions:
                 st.write(f"**{emotion['label']}** — {round(emotion['score'] * 100)}%")

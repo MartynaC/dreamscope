@@ -100,7 +100,7 @@ def _fill_wave_gradient(
 
 def plot_emotion_waves(
     emotions: list,
-    figsize: tuple = (10, 4),
+    figsize: tuple = (9, 5),
     is_dark_mode: bool = True,
     x_steps: int = 1000,
 ) -> plt.Figure:
@@ -137,9 +137,9 @@ def plot_emotion_waves(
     fig.patch.set_alpha(0)
     ax.set_facecolor('none')
 
-    x = np.linspace(0, 1, x_steps)
+    x = np.linspace(0, 2, x_steps)
     mid_y   = 0.0
-    max_amp = 1.0
+    max_amp = 2.0
 
     for e in emotions:
         # RGB normalization 0-255 → 0-1
@@ -162,9 +162,9 @@ def plot_emotion_waves(
     ax.axhline(
         mid_y,
         color=mid_color,
-        linewidth=0.6,
+        linewidth=0.5,
         linestyle="--",
-        alpha=0.4,
+        alpha=0.2,
     )
 
     # Horizontal legend at the top, centered on the figure
