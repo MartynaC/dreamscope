@@ -84,16 +84,18 @@ elif tab == "🧪 Visualization Lab":
         if dream_input:
             with st.spinner("Analysing your dream..."):
                 # LOCAL - comment out when using API
-                # emotions = match_emotions(dream_input)
-                # results = match_dream(dream_input)
-                # image_urls = match_images_clip(dream_input, n=3)
+                from dreamscope_backend.dreamscope import match_dream, match_emotions
+                from dreamscope_backend.clip_matcher import match_images_clip
+                emotions = match_emotions(dream_input)
+                results = match_dream(dream_input)
+                image_urls = match_images_clip(dream_input, n=3)
 
                 # API - comment out when working locally
-                response = requests.get(url, params=params).json()
-                emotions = response['emotions']
-                results = response['descriptions']
-                img_response = requests.get(f"{API_URL}/images", params=params).json()
-                image_urls = img_response['images']
+                # response = requests.get(url, params=params).json()
+                # emotions = response['emotions']
+                # results = response['descriptions']
+                # img_response = requests.get(f"{API_URL}/images", params=params).json()
+                # image_urls = img_response['images']
 
             st.subheader("Emotions detected")
             with st.container():
@@ -128,18 +130,18 @@ elif tab == "🔮 RAG":
         if dream_input:
             with st.spinner("Analysing your dream... (this may take a minute)"):
                 # LOCAL - comment out when using API
-                #from dreamscope_backend.dreamscope import match_dream, match_emotions
-                #from dreamscope_backend.clip_matcher import match_images_clip
-                #emotions = match_emotions(dream_input)
-                #results = match_dream(dream_input)
-                #image_urls = match_images_clip(dream_input, n=3)
+                from dreamscope_backend.dreamscope import match_dream, match_emotions
+                from dreamscope_backend.clip_matcher import match_images_clip
+                emotions = match_emotions(dream_input)
+                results = match_dream(dream_input)
+                image_urls = match_images_clip(dream_input, n=3)
 
                 # API - comment out when working locally
-                response = requests.get(url, params=params).json()
-                emotions = response['emotions']
-                results = response['descriptions']
-                img_response = requests.get(f"{API_URL}/images", params=params).json()
-                image_urls = img_response['images']
+                # response = requests.get(url, params=params).json()
+                # emotions = response['emotions']
+                # results = response['descriptions']
+                # img_response = requests.get(f"{API_URL}/images", params=params).json()
+                # image_urls = img_response['images']
 
             st.subheader("Emotions detected")
             with st.container():
