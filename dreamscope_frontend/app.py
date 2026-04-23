@@ -2,10 +2,14 @@ import streamlit as st
 import requests
 
 from emotion_waves import plot_emotion_waves
+#from dreamscope_backend.dreamscope import match_dream, match_emotions, match_dream_symbols
+#from dreamscope_backend.clip_matcher import match_images_clip
 
 API_URL = "https://dreamscope-api-356964226060.europe-west1.run.app/"
 
 st.set_page_config(page_title="DreamScope", page_icon="🌙")
+
+is_dark_mode = st.context.theme.type == "dark"
 
 tab = st.sidebar.radio("Navigation", ["🌙 MVP", "✨ Extended", "🧪 Visualization Lab", "🔮 RAG"], label_visibility="collapsed")
 
@@ -17,13 +21,14 @@ dream_input = st.text_area("Describe your dream", placeholder="Describe your dre
 url = f"{API_URL}/interpretations"
 params = {'dream_text': dream_input}
 
+
 if tab == "🌙 MVP":
     if st.button("Interpret my dream"):
         if dream_input:
             with st.spinner("Analysing your dream..."):
                 # LOCAL - comment out when using API
-                # emotions = match_emotions(dream_input)
-                # results = match_dream(dream_input)
+                #emotions = match_emotions(dream_input)
+                #results = match_dream_symbols(dream_input)
 
                 # API - comment out when working locally
                 response = requests.get(url, params=params).json()
@@ -48,9 +53,9 @@ elif tab == "✨ Extended":
         if dream_input:
             with st.spinner("Analysing your dream..."):
                 # LOCAL - comment out when using API
-                # emotions = match_emotions(dream_input)
-                # results = match_dream(dream_input)
-                # image_urls = match_images_clip(dream_input, n=3)
+                #emotions = match_emotions(dream_input)
+                #results = match_dream_symbols(dream_input)
+                #image_urls = match_images_clip(dream_input, n=4)
 
                 # API - comment out when working locally
                 response = requests.get(url, params=params).json()
@@ -82,9 +87,11 @@ elif tab == "🧪 Visualization Lab":
         if dream_input:
             with st.spinner("Analysing your dream..."):
                 # LOCAL - comment out when using API
+                # from dreamscope_backend.dreamscope import match_dream, match_emotions
+                # from dreamscope_backend.clip_matcher import match_images_clip
                 # emotions = match_emotions(dream_input)
                 # results = match_dream(dream_input)
-                # image_urls = match_images_clip(dream_input, n=3)
+                # image_urls = match_images_clip(dream_input, n=4)
 
                 # API - comment out when working locally
                 response = requests.get(url, params=params).json()
@@ -104,7 +111,7 @@ elif tab == "🧪 Visualization Lab":
                     """,
                     unsafe_allow_html=True,
                 )
-            fig = plot_emotion_waves(emotions)
+            fig = plot_emotion_waves(emotions, is_dark_mode=is_dark_mode)
             st.pyplot(fig, width='stretch')
 
             st.subheader("Dream images — CLIP matched to dream description")
@@ -126,19 +133,18 @@ elif tab == "🔮 RAG":
         if dream_input:
             with st.spinner("Analysing your dream... (this may take a minute)"):
                 # LOCAL - comment out when using API
-                from dreamscope_backend.dreamscope import match_dream, match_emotions
-                from dreamscope_backend.clip_matcher import match_images_clip
-                emotions = match_emotions(dream_input)
-                results = match_dream(dream_input)
-                image_urls = match_images_clip(dream_input, n=3)
-
+                #from dreamscope_backend.dreamscope import match_dream, match_emotions
+                #from dreamscope_backend.clip_matcher import match_images_clip
+                #emotions = match_emotions(dream_input)
+                #results = match_dream(dream_input)
+                #image_urls = match_images_clip(dream_input, n=4)
+#
                 # API - comment out when working locally
-                # response = requests.get(url, params=params).json()
-                # emotions = response['emotions']
-                # results = response['descriptions']
-                # img_response = requests.get(f"{API_URL}/images", params=params).json()
-                # image_urls = img_response['images']
-
+                response = requests.get(f"{API_URL}/rag", params=params).json()
+                emotions = response['emotions']
+                results = response['rag']
+                img_response = requests.get(f"{API_URL}/images", params=params).json()
+                image_urls = img_response['images']
             st.subheader("Emotions detected")
             with st.container():
                 st.markdown(
@@ -150,7 +156,7 @@ elif tab == "🔮 RAG":
                     """,
                     unsafe_allow_html=True,
                 )
-            fig = plot_emotion_waves(emotions)
+            fig = plot_emotion_waves(emotions, is_dark_mode=is_dark_mode)
             st.pyplot(fig, width='stretch')
 
             st.subheader("Dream images — CLIP matched to dream description")
