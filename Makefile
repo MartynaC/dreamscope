@@ -24,4 +24,5 @@ deploy_to_cloud_run:
 		--cpu 4 \
 		--timeout 3600 \
 		--memory $(MEMORY) \
-		--region $(GCP_REGION)
+		--region $(GCP_REGION) \
+		--set-env-vars API_KEY=$(API_KEY)
