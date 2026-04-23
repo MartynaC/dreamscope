@@ -8,6 +8,7 @@ run_container_local:
 
 build_for_production:
 	docker build \
+		--no-cache \
 		--platform linux/amd64 \
 		-t $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT)/$(ARTIFACT_REPO)/$(IMAGE):prod \
 		.
@@ -25,3 +26,4 @@ deploy_to_cloud_run:
 		--timeout 3600 \
 		--memory $(MEMORY) \
 		--region $(GCP_REGION)
+		--set-env-vars API_KEY=$(API_KEY)
