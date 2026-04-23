@@ -3,8 +3,6 @@ import requests
 
 from emotion_waves import plot_emotion_waves
 from concurrent.futures import ThreadPoolExecutor
-#from dreamscope_backend.dreamscope import match_dream, match_emotions, match_dream_symbols
-#from dreamscope_backend.clip_matcher import match_images_clip
 
 ### LOCAL - Switch to 'USE_LOCAL = True' to make local tests without API ###
 USE_LOCAL = False
@@ -13,7 +11,7 @@ if USE_LOCAL:
     from dreamscope_backend.dreamscope import match_dream_symbols, match_dream, match_emotions
     from dreamscope_backend.clip_matcher import match_images_clip
 
-### Helper function to handle API requests safely ###
+### Helper functions to handle Local vs API mode, and protect from API failures ###
 def safe_api_request(url, params=None):
     """Makes a GET request and returns (data, error) tuple."""
     try:
@@ -63,7 +61,8 @@ st.set_page_config(page_title="DreamScope", page_icon="🌙")
 
 is_dark_mode = st.context.theme.type == "dark"
 
-tab = st.sidebar.radio("Navigation", ["🌙 MVP", "✨ Extended", "🧪 Visualization Lab", "🔮 RAG", "🛠️ Troubleshooting"], label_visibility="collapsed")
+tab = st.sidebar.radio("Navigation", ["🛠️ MVP", "✨ Extended", "🧪 Visualization Lab", "🔮 RAG"]
+                       , label_visibility="collapsed")
 
 st.title("🌙 DreamScope")
 st.subheader("Dream interpretation")
@@ -72,7 +71,7 @@ dream_input = st.text_area("Describe your dream", placeholder="Describe your dre
 params = {'dream_text': dream_input}
 
 
-if tab == "🌙 MVP":
+if tab == "🛠️ MVP":
 
     if st.button("Interpret my dream"):
         if dream_input:
@@ -170,43 +169,6 @@ elif tab == "🧪 Visualization Lab":
 
 
 elif tab == "🔮 RAG":
-
-    if st.button("Interpret my dream"):
-        if dream_input:
-            with st.spinner("Analysing your dream..."):
-                inter_data, inter_error, rag_data, rag_error, img_data, img_error = fetch_dream_data(
-                    dream_input, api_url=API_URL, params=params
-                )
-
-            st.subheader("Emotions detected")
-            with st.container():
-                st.markdown(
-                    """
-                    <style>
-                        div[class*="stPlotlyChart"] { height: 600px !important; }
-                        figure { height: 600px !important; }
-                    </style>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            emotions = rag_data.get('emotions')
-            fig = plot_emotion_waves(emotions, is_dark_mode=is_dark_mode)
-            st.pyplot(fig, width='content')
-
-            st.subheader("Dream images — CLIP matched to dream description")
-            image_urls = img_data.get('images', [])
-            cols = st.columns(3)
-            for col, img_url in zip(cols, image_urls):
-                col.image(img_url, width='stretch')
-
-            st.subheader("Dream interpretation")
-            results = rag_data.get('rag')
-            st.write(results)
-        else:
-            st.warning("Please describe your dream first.")
-
-
-elif tab == "🛠️ Troubleshooting":
 
     if st.button("Interpret my dream"):
         if not dream_input:
