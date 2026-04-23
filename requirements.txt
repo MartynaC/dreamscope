@@ -12,3 +12,4 @@ google-cloud-storage
 google-auth
 matplotlib
 accelerate
+google-genai
