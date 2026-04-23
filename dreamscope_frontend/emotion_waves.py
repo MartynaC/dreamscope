@@ -137,9 +137,9 @@ def plot_emotion_waves(
     fig.patch.set_alpha(0)
     ax.set_facecolor('none')
 
-    x = np.linspace(0, 2, x_steps)
+    x = np.linspace(0, 1, x_steps)
     mid_y   = 0.0
-    max_amp = 2.0
+    max_amp = 1.0
 
     for e in emotions:
         # RGB normalization 0-255 → 0-1
@@ -197,7 +197,7 @@ def plot_emotion_waves(
     )
 
     ax.set_xlim(0, 1)
-    ax.set_ylim(-max_amp * 1.15, max_amp * 1.15)
+    ax.set_ylim(-max_amp * 1.00, max_amp * 1.00)
     ax.axis("off")
 
     # --- Margins: adjusted for the top legend and compact on sides
