@@ -9,6 +9,7 @@ emotion-classification/.ipynb_checkpoints/emotion_classification-checkpoint.ipyn
 # System files
 .ipynb_checkpoints/
 *.pyc
+*.pyo
 *.swp
 *.iml
 *.vscode

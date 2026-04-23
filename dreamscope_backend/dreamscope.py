@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 import chromadb
@@ -9,12 +8,21 @@ from transformers import pipeline
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import sent_tokenize
-nltk.download('wordnet')
+
+from google import genai
 
 from pathlib import Path
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent
 print(BASE_DIR)
+
+# Initialize Gemini Client
+gem_client = genai.Client(api_key=os.getenv("API_KEY"))
 
 chroma_client = chromadb.PersistentClient(path=f'{BASE_DIR}/data/chroma_db')
 
@@ -87,7 +95,6 @@ def match_dream(dream_text, top_k=5):
         for contexts, interpretations in zip(result_metadata['documents'], result_metadata['metadatas'])
         for context, interpretation in zip(contexts, interpretations)
         ]
-    flat_results_unique = set(flat_results)
 
     # Rerank results
     # Initialize reranker
@@ -100,20 +107,14 @@ def match_dream(dream_text, top_k=5):
     # Rerank according to results relevance
     scores = reranker.predict(pairs)
 
-    # Trier en gardant les métadonnées
+    # Sort and keep metadata
     ranked = sorted(zip(flat_results, scores), key=lambda x: x[1], reverse=True)
     print ("✅ reranked symbols...")
 
     # Extract list of ranked interpretations
     interpretations = [symbol[0][0] + ' ' + symbol[0][1] for symbol in ranked]
 
-    # Initialize response Model
-    pipe = pipeline(
-        "text-generation",
-        model='microsoft/Phi-3-mini-4k-instruct',
-        device='cpu'
-        )
-    print ("✅ initialized LLM...")
+    print(interpretations[:5])
 
     # Define prompt template
     prompt = f'You are interpreting a dream submitted by the user. \
@@ -123,13 +124,12 @@ def match_dream(dream_text, top_k=5):
         strictly using these interpretations only and not adding any new idea, \
         in less than 100 words.'
 
-    messages = [
-            {'role': 'system', 'content': prompt},
-        ]
-
-    # Query model
-    output = pipe(messages)
-    return output[0]['generated_text'][-1]['content']
+    # Query Google API
+    response = gem_client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=prompt
+        )
+    return response.text
 
 
 def match_emotions(dream_text):
