@@ -199,8 +199,8 @@ elif tab == "✨ Extended":
             st.subheader("Dream images — CLIP matched to dream description")
             image_urls = img_data.get('images', [])
             cols = st.columns(3)
-            for col, img_url in zip(cols, image_urls):
-                col.image(img_url, width='stretch')
+            for col, img in zip(cols, image_urls):
+                col.image(img['url'], width='stretch')
 
             st.subheader("Symbol interpretations")
             results = inter_data.get('descriptions')
@@ -238,10 +238,14 @@ elif tab == "🧪 Visualization Lab":
             st.pyplot(fig, width='content')
 
             st.subheader("Dream images — CLIP matched to dream description")
-            image_urls = img_data.get('images', [])
-            cols = st.columns(3)
-            for col, img_url in zip(cols, image_urls):
-                col.image(img_url, width='stretch')
+            images = img_data.get('images', [])
+            if images:
+                for i in range(0, len(images), 2):
+                    row = images[i:i+2]
+                    cols = st.columns(2, gap='medium')
+                    for col, img in zip(cols, row):
+                        col.image(img['url'], width='content')
+                        col.caption(f"**{img['artist']}** \n*{img['title']}*")
 
             st.subheader("Symbol interpretations")
             results = inter_data.get('descriptions')
