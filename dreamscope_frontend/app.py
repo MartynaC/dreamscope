@@ -5,11 +5,11 @@ from emotion_waves import plot_emotion_waves
 from concurrent.futures import ThreadPoolExecutor
 
 ### LOCAL - Switch to 'USE_LOCAL = True' to make local tests without API ###
-USE_LOCAL = False
+USE_LOCAL = True
 
 if USE_LOCAL:
     from dreamscope_backend.dreamscope import match_dream_symbols, match_dream, match_emotions
-    from dreamscope_backend.clip_matcher import match_images_clip
+    from dreamscope_backend.clip_matcher_v2 import match_images_clip
 
 ### Helper functions to handle Local vs API mode, and protect from API failures ###
 def safe_api_request(url, params=None):
@@ -207,13 +207,17 @@ elif tab == "🔮 RAG":
             st.write("_Looks like we encoutered a problem... Here are some technical details:_")
             st.error(img_error)
         else:
-            image_urls = img_data.get('images', [])
-            if image_urls:
-                cols = st.columns(4)
-                for col, img_url in zip(cols, image_urls):
-                    col.image(img_url, width='content')
+            images = img_data.get('images', [])
+            if images:
+                for i in range(0, len(images), 2):
+                    row = images[i:i+2]
+                    cols = st.columns(2, gap='medium')
+                    for col, img in zip(cols, row):
+                        col.image(img['url'], width='content')
+                        col.caption(f"**{img['artist']}** \n*{img['title']}*")
             else:
                 st.warning("No images returned.")
+
 
         st.subheader("Dream interpretation")
         if rag_error:
