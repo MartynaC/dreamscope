@@ -207,13 +207,17 @@ elif tab == "🔮 RAG":
             st.write("_Looks like we encoutered a problem... Here are some technical details:_")
             st.error(img_error)
         else:
-            image_urls = img_data.get('images', [])
-            if image_urls:
-                cols = st.columns(4)
-                for col, img_url in zip(cols, image_urls):
-                    col.image(img_url, width='content')
+            images = img_data.get('images', [])
+            if images:
+                for i in range(0, len(images), 2):
+                    row = images[i:i+2]
+                    cols = st.columns(2, gap='medium')
+                    for col, img in zip(cols, row):
+                        col.image(img['url'], width='content')
+                        col.caption(f"**{img['artist']}** \n*{img['title']}*")
             else:
                 st.warning("No images returned.")
+
 
         st.subheader("Dream interpretation")
         if rag_error:
