@@ -5,11 +5,11 @@ from emotion_waves import plot_emotion_waves
 from concurrent.futures import ThreadPoolExecutor
 
 ### LOCAL - Switch to 'USE_LOCAL = True' to make local tests without API ###
-USE_LOCAL = True
+USE_LOCAL = False
 
 if USE_LOCAL:
     from dreamscope_backend.dreamscope import match_dream_symbols, match_dream, match_emotions
-    from dreamscope_backend.clip_matcher_v2 import match_images_clip
+    from dreamscope_backend.clip_matcher import match_images_clip
 
 ### Helper functions to handle Local vs API mode, and protect from API failures ###
 def safe_api_request(url, params=None):
