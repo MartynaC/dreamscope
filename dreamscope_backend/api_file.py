@@ -21,5 +21,5 @@ def rag(dream_text):
 
 @app.get("/images")
 def images(dream_text):
-    image_urls = match_images_clip(dream_text, n=3, use_gcs=True)
+    image_urls = match_images_clip(dream_text, n=4, use_gcs=True)
     return {"images": image_urls}
