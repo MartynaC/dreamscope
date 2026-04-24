@@ -53,6 +53,7 @@ def build_clip_index():
 #         blob.download_to_filename(tmp.name)
 #         return np.load(tmp.name, allow_pickle=True)
 
+
 def load_from_gcs(blob_name):
     url = f"https://storage.googleapis.com/{BUCKET_NAME}/{blob_name}"
     with tempfile.NamedTemporaryFile(delete=False, suffix=".npy") as tmp:
@@ -61,6 +62,22 @@ def load_from_gcs(blob_name):
 
 
 GCS_BASE_URL = "https://storage.googleapis.com/dreamscope-images/abstract_art_512"
+
+
+def parse_filename(fname: str) -> tuple[str, str]:
+    stem = os.path.splitext(fname)[0]
+    parts = stem.split("_")
+    if len(parts) >= 3:
+        artist = parts[1].replace("-", " ").title()
+        title = f"N°{parts[2]}"
+    elif len(parts) == 2:
+        artist = parts[1].replace("-", " ").title()
+        title = "Unknown"
+    else:
+        artist = "Unknown"
+        title = stem
+    return artist, title
+
 
 def match_images_clip(dream_text, n=3, use_gcs=False):
     if use_gcs:
@@ -81,8 +98,16 @@ def match_images_clip(dream_text, n=3, use_gcs=False):
     similarities = np.dot(embeddings, text_embedding)
     top_indices = np.argsort(similarities)[-n:][::-1]
 
-    # return URLs instead of filenames
-    return [f"{GCS_BASE_URL}/{filenames[i]}" for i in top_indices]
+    results = []
+    for i in top_indices:
+        fname = filenames[i]
+        artist, title = parse_filename(fname)
+        results.append({
+            "url": f"{GCS_BASE_URL}/{fname}",
+            "title": title,
+            "artist": artist,
+        })
+    return results
 
 
 if __name__ == "__main__":
@@ -97,4 +122,4 @@ if __name__ == "__main__":
         print(f"\n{dream}")
         images = match_images_clip(dream, n=3)
         for img in images:
-            print(f"  {img}")
+            print(f"  [{img['artist']}] {img['title']} — {img['url']}")
