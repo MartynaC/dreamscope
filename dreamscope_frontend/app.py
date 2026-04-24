@@ -47,9 +47,9 @@ def fetch_dream_data(dream_input, api_url=None, params=None):
             return None, error_msg, None, error_msg
     else:
         with ThreadPoolExecutor() as executor:
-            future_inter = executor.submit(safe_api_request, f"{api_url}/interpretations", params)
-            future_rag = executor.submit(safe_api_request, f"{api_url}/rag", params)
-            future_img = executor.submit(safe_api_request, f"{api_url}/images", params)
+            future_inter = executor.submit(safe_api_request, f"{api_url}interpretations", params)
+            future_rag = executor.submit(safe_api_request, f"{api_url}rag", params)
+            future_img = executor.submit(safe_api_request, f"{api_url}images", params)
             inter_data, inter_error = future_inter.result()
             rag_data, rag_error = future_rag.result()
             img_data, img_error = future_img.result()
@@ -61,17 +61,103 @@ st.set_page_config(page_title="DreamScope", page_icon="🌙")
 
 is_dark_mode = st.context.theme.type == "dark"
 
-tab = st.sidebar.radio("Navigation", ["🛠️ MVP", "✨ Extended", "🧪 Visualization Lab", "🔮 RAG"]
-                       , label_visibility="collapsed")
 
-st.title("🌙 DreamScope")
+
+tab_options = ["🌙 MVP", "✨ Extended", "🧪 Visualization Lab", "🔮 RAG"]
+tab_slugs = {
+    "mvp": "🌙 MVP",
+    "extended": "✨ Extended",
+    "viz": "🧪 Visualization Lab",
+    "rag": "🔮 RAG",
+}
+slug_map = {v: k for k, v in tab_slugs.items()}
+
+slug = st.query_params.get("tab", "mvp")
+tab = tab_slugs.get(slug, "🌙 MVP")
+
+st.markdown("""
+<style>
+section[data-testid="stSidebar"] div[data-testid="stButton"] > button {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.35rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: #cfcfd6;
+    font-weight: 700;
+}
+
+section[data-testid="stSidebar"] div[data-testid="stButton"] > button:hover {
+    background: rgba(255,255,255,0.08);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.16);
+}
+
+section[data-testid="stSidebar"] div[data-testid="stButton"] > button[kind="primary"] {
+    background: linear-gradient(90deg, #c8a2ff, #ff9acb, #ffe0b3);
+    color: #111111;
+    border: none;
+    box-shadow: 0 0 22px rgba(255,154,203,0.28);
+}
+</style>
+""", unsafe_allow_html=True)
+
+for tab_name in tab_options:
+    slug_val = slug_map[tab_name]
+    is_active = tab_name == tab
+
+    if st.sidebar.button(
+        tab_name,
+        key=f"nav_{slug_val}",
+        type="primary" if is_active else "secondary",
+        use_container_width=True,
+    ):
+        st.query_params["tab"] = slug_val
+        st.rerun()
+
+
+
+st.markdown("""
+<style>
+.gradient-text {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(255, 180, 220, 0.4);
+    background: linear-gradient(
+        270deg,
+        #c8a2ff,  /* lavender */
+        #ff9acb,  /* pink */
+        #ffe0b3,  /* peach */
+        #c8a2ff
+    );
+
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: gradientMove 8s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+</style>
+
+<h1 class="gradient-text">🌙 DREAMSCOPE</h1>
+""", unsafe_allow_html=True)
 st.subheader("Dream interpretation")
 
 dream_input = st.text_area("Describe your dream", placeholder="Describe your dream in as much detail as you can remember...")
 params = {'dream_text': dream_input}
 
 
-if tab == "🛠️ MVP":
+if tab == "🌙 MVP":
 
     if st.button("Interpret my dream"):
         if dream_input:
